@@ -1,19 +1,18 @@
 #include "stdafx.h"
-#include "Constants.h"
+#include "matrix.h"
 
 class CThreadInverseMatrix
 {
 public:
-	CThreadInverseMatrix(std::vector<std::vector<double>> matrix, std::vector<std::vector<double>> eMatrix);
-	CThreadInverseMatrix(std::vector<std::vector<double>> matrix, std::vector<std::vector<double>> eMatrix, int threadNumber);
+	CThreadInverseMatrix(CMatrix & const matrix);
+	CThreadInverseMatrix(CMatrix & const matrix, int threadNumber);
 	~CThreadInverseMatrix();
-	void DoInverseMatrix();
+	void DoInverseMatrix(size_t start, size_t finish);
 	void DoParallInverseMatrix();
-	void ThreadFunc(int number);
 private:
-	void WriteInverseMatrix();
 	std::vector<std::vector<double>> m_matrix;
 	std::vector<std::vector<double>> m_eMatrix;
 	int maxThread;
 	std::vector<std::thread> thrs;
+	size_t n;
 };

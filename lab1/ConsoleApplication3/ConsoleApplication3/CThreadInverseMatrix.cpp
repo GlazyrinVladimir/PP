@@ -3,20 +3,22 @@
 
 void  StartParall(CThreadInverseMatrix * matr, size_t num)
 {
-	matr->ThreadFunc(num);
+	matr->DoInverseMatrix(num, num+1);
 }
 
-CThreadInverseMatrix::CThreadInverseMatrix(std::vector<std::vector<double>> matrix, std::vector<std::vector<double>> eMatrix)
+CThreadInverseMatrix::CThreadInverseMatrix(CMatrix & const matrix)
 {
-	m_eMatrix = eMatrix;
-	m_matrix = matrix;
-	DoInverseMatrix();
+	m_eMatrix = matrix.GetEMatrix();
+	m_matrix = matrix.GetMatrix();
+	n = matrix.GetSize();
+	DoInverseMatrix(0, n);
 };
 
-CThreadInverseMatrix::CThreadInverseMatrix(std::vector<std::vector<double>> matrix, std::vector<std::vector<double>> eMatrix, int threadNumber)
+CThreadInverseMatrix::CThreadInverseMatrix(CMatrix & const matrix, int threadNumber)
 {
-	m_eMatrix = eMatrix;
-	m_matrix = matrix;
+	m_eMatrix = matrix.GetEMatrix();
+	m_matrix = matrix.GetMatrix();
+	n = matrix.GetSize();
 	maxThread = threadNumber;
 	DoParallInverseMatrix();
 };
@@ -26,58 +28,46 @@ CThreadInverseMatrix::~CThreadInverseMatrix()
 {
 };
 
-void CThreadInverseMatrix::WriteInverseMatrix()
-{
-	std::cout << "inverse matrix" << std::endl;
-	for (int i = 0; i < n; i++)
-	{
-		for (int j = 0; j < n; j++)
-		{
-			m_eMatrix[i][j] = m_eMatrix[i][j];
-			std::cout << m_eMatrix[i][j] << " ";
-		}
-		std::cout << std::endl;
-	}
-}
 
-void CThreadInverseMatrix::DoInverseMatrix()
+void CThreadInverseMatrix::DoInverseMatrix(size_t start, size_t finish)
 {
-	for (int diagonal = 0; diagonal < n; diagonal++)
+	for (size_t diagonal = start; diagonal < finish; diagonal++)
 	{
+		
 		if (m_matrix[diagonal][diagonal] != 1)
 		{
-			for (int k = diagonal + 1; k < n; k++)
+			for (size_t k = diagonal + 1; k < n; k++)
 			{
 				m_matrix[diagonal][k] = m_matrix[diagonal][k] / m_matrix[diagonal][diagonal];
 			}
-			for (int k = 0; k < n; k++)
+			for (size_t k = 0; k < n; k++)
 			{
 				m_eMatrix[diagonal][k] = m_eMatrix[diagonal][k] / m_matrix[diagonal][diagonal];
 			}
 			m_matrix[diagonal][diagonal] /= m_matrix[diagonal][diagonal];
 		}
-		for (int i = diagonal + 1; i < n; i++)
+		for (size_t i = diagonal + 1; i < n; i++)
 		{
 			double storage = m_matrix[i][diagonal];
 
-			for (int j = diagonal; j < n; j++)
+			for (size_t j = diagonal; j < n; j++)
 			{
 				m_matrix[i][j] -= m_matrix[diagonal][j] * storage;
 			}
-			for (int j = 0; j < n; j++)
+			for (size_t j = 0; j < n; j++)
 			{
 				m_eMatrix[i][j] -= m_eMatrix[diagonal][j] * storage;
 			}
 		}
-		for (int i = 0; i < diagonal; i++)
+		for (size_t i = 0; i < diagonal; i++)
 		{
 			double storage = m_matrix[i][diagonal];
 
-			for (int j = diagonal; j < n; j++)
+			for (size_t j = diagonal; j < n; j++)
 			{
 				m_matrix[i][j] -= m_matrix[diagonal][j] * storage;
 			}
-			for (int j = 0; j < n; j++)
+			for (size_t j = 0; j < n; j++)
 			{
 				m_eMatrix[i][j] -= m_eMatrix[diagonal][j] * storage;
 			}
@@ -85,19 +75,17 @@ void CThreadInverseMatrix::DoInverseMatrix()
 	}
 }
 
-
 void CThreadInverseMatrix::DoParallInverseMatrix()
-{
-	
+{	
 	thrs.resize(maxThread);
 	size_t currentThread = 0;
-	for (int i = 0; i < n; i++)
+	for (size_t i = 0; i < n; i++)
 	{
 		thrs[currentThread] = std::thread(StartParall, this, i);
 		currentThread++;
 		if (currentThread == maxThread)
 		{
-			for (int j = 0; j < maxThread; j++)
+			for (size_t j = 0; j < maxThread; j++)
 			{
 				thrs[j].join();
 			}
@@ -105,53 +93,8 @@ void CThreadInverseMatrix::DoParallInverseMatrix()
 		}
 	}
 
-	for (int j = 0; j < currentThread; j++)
+	for (size_t j = 0; j < currentThread; j++)
 	{
 		thrs[j].join();
-	}
-
-}
-
-void CThreadInverseMatrix::ThreadFunc(int number)
-{
-	int diagonal = number;
-
-	if (m_matrix[diagonal][diagonal] != 1)
-	{
-		for (int k = diagonal + 1; k < n; k++)
-		{
-			m_matrix[diagonal][k] = m_matrix[diagonal][k] / m_matrix[diagonal][diagonal];
-		}
-		for (int k = 0; k < n; k++)
-		{
-			m_eMatrix[diagonal][k] = m_eMatrix[diagonal][k] / m_matrix[diagonal][diagonal];
-		}
-		m_matrix[diagonal][diagonal] /= m_matrix[diagonal][diagonal];
-	}
-	for (int i = diagonal + 1; i < n; i++)
-	{
-		double storage = m_matrix[i][diagonal];
-
-		for (int j = diagonal; j < n; j++)
-		{
-			m_matrix[i][j] -= m_matrix[diagonal][j] * storage;
-		}
-		for (int j = 0; j < n; j++)
-		{
-			m_eMatrix[i][j] -= m_eMatrix[diagonal][j] * storage;
-		}
-	}
-	for (int i = 0; i < diagonal; i++)
-	{
-		double storage = m_matrix[i][diagonal];
-
-		for (int j = diagonal; j < n; j++)
-		{
-			m_matrix[i][j] -= m_matrix[diagonal][j] * storage;
-		}
-		for (int j = 0; j < n; j++)
-		{
-			m_eMatrix[i][j] -= m_eMatrix[diagonal][j] * storage;
-		}
 	}
 }

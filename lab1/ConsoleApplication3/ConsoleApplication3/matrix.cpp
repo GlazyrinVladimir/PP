@@ -1,15 +1,20 @@
 #include "stdafx.h"
 #include "matrix.h"
 
-CMatrix::CMatrix()
+CMatrix::CMatrix(size_t size)
 {
+	n = size;
 	FillMatrix();
 	if (!GetDeterm())
 	{
-		std::cout << "Change" << std::endl;
 		while (GetDeterm() != true)
 			FillMatrix();
 	}
+}
+
+size_t CMatrix::GetSize()
+{
+	return n;
 }
 
 CMatrix::~CMatrix()
@@ -72,21 +77,20 @@ std::vector<std::vector<double>> CMatrix::GetEMatrix()
 	return m_eMatrix;
 }
 
-std::vector<std::vector<double>> CMatrix::GetMatrix()
+void CMatrix::WriteMatrix(std::vector<std::vector<double>> m)
 {
-	return m_matrix;
-}
-
-void CMatrix::WriteMatrix()
-{
-	std::cout << "matrix" << std::endl;
 	for (int i = 0; i < n; i++)
 	{
 		for (int j = 0; j < n; j++)
 		{
-			m_matrix[i][j] =m_matrix[i][j];
-			std::cout << m_matrix[i][j] << " ";
+			m[i][j] = m[i][j];
+			std::cout << m[i][j] << " ";
 		}
 		std::cout << std::endl;
 	}
+}
+
+std::vector<std::vector<double>> CMatrix::GetMatrix()
+{
+	return m_matrix;
 }
