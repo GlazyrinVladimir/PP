@@ -1,0 +1,8 @@
+﻿C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V140\Microsoft.CppBuild.targets(392,5): warning MSB8028: The intermediate directory (x64\Release\) contains files shared from another project (ConsoleApplication21.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+  stdafx.cpp
+  ConsoleApplication21.cpp
+  Создание кода
+  All 164 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Создание кода завершено
+  ConsoleApplication21.vcxproj -> C:\Users\Vovchik\documents\visual studio 2015\Projects\ConsoleApplication21\x64\Release\lab5.exe
+  ConsoleApplication21.vcxproj -> C:\Users\Vovchik\documents\visual studio 2015\Projects\ConsoleApplication21\x64\Release\lab5.pdb (Full PDB)

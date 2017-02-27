@@ -1,9 +1,9 @@
 ﻿  stdafx.cpp
   lab03_server_main.cpp
   AppLauncher.cpp
-c:\users\vovchik\desktop\пп толян\pp-master\lab04\lab03_server\applauncher.cpp(66): warning C4267: инициализация: преобразование из "size_t" в "unsigned int"; возможна потеря данных
-c:\users\vovchik\desktop\пп толян\pp-master\lab04\lab03_server\applauncher.cpp(69): warning C4267: +=: преобразование из "size_t" в "unsigned int"; возможна потеря данных
+c:\pp\lab04\lab03_server\applauncher.cpp(66): warning C4267: инициализация: преобразование из "size_t" в "unsigned int"; возможна потеря данных
+c:\pp\lab04\lab03_server\applauncher.cpp(69): warning C4267: +=: преобразование из "size_t" в "unsigned int"; возможна потеря данных
   ControlSocket.cpp
   Создание кода...
-  lab03_server.vcxproj -> C:\Users\Vovchik\Desktop\пп толян\PP-master\lab04\x64\Debug\lab03_server.exe
-  lab03_server.vcxproj -> C:\Users\Vovchik\Desktop\пп толян\PP-master\lab04\x64\Debug\lab03_server.pdb (Partial PDB)
+  lab03_server.vcxproj -> C:\pp\lab04\x64\Debug\lab03_server.exe
+  lab03_server.vcxproj -> C:\pp\lab04\x64\Debug\lab03_server.pdb (Partial PDB)
